@@ -48,25 +48,6 @@ This enables the system to remain both:
 
 ---
 
-## Why This Matters
-
-Safety-critical systems frequently operate in environments where:
-- disturbances are difficult to model,
-- sensor noise changes over time,
-- dynamics are imperfectly known,
-- and real-world conditions differ from training data.
-
-DRS-gatekeeper is designed to remain reliable even when these assumptions fail.
-
-This makes the framework particularly relevant for:
-- autonomous driving,
-- robotics,
-- aerospace systems,
-- learned control policies,
-- and real-world deployment of AI-enabled autonomy.
-
----
-
 ## Simulation Environments
 
 The framework has been evaluated across systems of increasing complexity, including:
@@ -77,7 +58,10 @@ The framework has been evaluated across systems of increasing complexity, includ
 - **Formula 1 Racecar**
   - High-speed autonomous racing under empirical disturbances and perception noise.
   - Nominal policy - uses Model Predictive Path Integral (MPPI) from the [paper](https://ieeexplore.ieee.org/document/8558663)
-
+  - The uncertainty arises from two sources:
+     - The perception module provides noisy estimates of the distance to the track boundaries.
+     - The nominal vehicle model used by the planner differs from the unknown true vehicle dynamics obtained from [Asseto Corsa Gym](https://assetto-corsa-gym.github.io/).
+     - A distributional shift arises because the DRS-gatekeeper does not explicitly account for perception noise and relies on approximate vehicle dynamics.
 
 - **F-16 Fighter Jet**
   - Low-altitude canyon flight with nonlinear aircraft dynamics and aerodynamic uncertainty.
