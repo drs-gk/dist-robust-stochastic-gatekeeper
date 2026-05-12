@@ -180,12 +180,12 @@
     <div class="columns">
       <div class="column has-text-centered">
           <p><strong>Nominal</strong></p>
-          <img src="https://github.com/user-attachments/assets/8393db88-44c6-41c3-9b51-53ffd2113cf6"
+          <img src="https://github.com/user-attachments/assets/b4079060-063b-4e5d-a4cf-fd5d485151fd"
                alt="F-16 fighter jet nominal result" style="max-width: 100%;">
       </div>
       <div class="column has-text-centered">
           <p><strong>DRS-gatekeeper</strong></p>
-          <img src="https://github.com/user-attachments/assets/c0962e98-1c34-4ec4-9071-2d2d8c132882"
+          <img src="https://github.com/user-attachments/assets/a12c7288-fe20-4a75-8443-38ae7217d6c9"
                alt="F-16 fighter jet DRS-gatekeeper result" style="max-width: 100%;">
       </div>
     </div>
@@ -335,17 +335,13 @@
         <div class="box">
           <h3 class="title is-4">F-16 Fighter Jet</h3>
           <div class="content">
-            <p>Low-altitude canyon flight with nonlinear aircraft dynamics and aerodynamic uncertainty.</p>
-            
-            <h4 class="title is-5" style="margin-top: 1.5rem;">Aircraft Model</h4>
-            <p>We consider an F-16 aircraft with state:</p>
-            $$x_t = [p^N_t, p^E_t, h_t, u_t, v_t, w_t, p_t, q_t, r_t, \phi_t, \theta_t, \psi_t]^\top$$
-            <p>where \((p^N_t, p^E_t, h_t)\) denote inertial position (north, east, altitude) and \((\phi_t,\theta_t,\psi_t)\) denote Euler attitude (roll, pitch, yaw), \((u_t,v_t,w_t)\) are body-frame velocities, and \((p_t,q_t,r_t)\) are body angular rates. The control input is:</p>
-            $$u_t = [\delta_{A,t}, \delta_{E,t}, \delta_{R,t}, \delta_{T,t}]^\top$$
-            <p>with aileron, elevator, rudder, and throttle commands.</p>
-            
-            <h4 class="title is-5">Discrete-Time Rigid-Body Dynamics</h4>
-            <p>We model the aircraft dynamics using a discrete-time rigid-body model \(x_{t+1} = f(x_t, u_t)\):</p>
+            <p>We consider an F-16 aircraft with state</p>
+            $$x_t = [p^N_t, p^E_t, h_t, u_t, v_t, w_t, p_t, q_t, r_t, \phi_t, \theta_t, \psi_t]^\top,$$
+            <p>where \((p^N_t, p^E_t, h_t)\) and \((\phi_t,\theta_t,\psi_t)\) denote inertial position and Euler attitude, \((u_t,v_t,w_t)\) are body-frame velocities, and \((p_t,q_t,r_t)\) are body angular rates. The control input is</p>
+            $$u_t = [\delta_{A,t}, \delta_{E,t}, \delta_{R,t}, \delta_{T,t}]^\top,$$
+            <p>with aileron, elevator, rudder, and throttle commands. Note that \(\delta\), \(\alpha\), and \(\beta\) in the F-16 dynamics denote control inputs, angle of attack, and sideslip angle, and are distinct from DRS-gatekeeper parameters.</p>
+
+            <p>We model the aircraft dynamics using a discrete-time rigid-body model \(x_{t+1} = f(x_t, u_t)\) as</p>
             $$x_{t+1} = x_t + \Delta t \begin{bmatrix}
             \dot p^N_t \\
             \dot p^E_t \\
@@ -360,34 +356,30 @@
             q_t \cos\phi_t - r_t \sin\phi_t \\
             \frac{q_t \sin\phi_t + r_t \cos\phi_t}{\cos\theta_t}
             \end{bmatrix}$$
-            <p>where \(\Delta t=0.033\) is the sampling time and \(g=9.81\,\mathrm{m/s^2}\). The position kinematics are:</p>
-            $$\dot p^N_t = u_t(c_{\theta_t}c_{\psi_t}) + v_t(s_{\phi_t}s_{\theta_t}c_{\psi_t} - c_{\phi_t}s_{\psi_t}) + w_t(c_{\phi_t}s_{\theta_t}c_{\psi_t} + s_{\phi_t}s_{\psi_t})$$
-            $$\dot p^E_t = u_t(c_{\theta_t}s_{\psi_t}) + v_t(s_{\phi_t}s_{\theta_t}s_{\psi_t} + c_{\phi_t}c_{\psi_t}) + w_t(c_{\phi_t}s_{\theta_t}s_{\psi_t} - s_{\phi_t}c_{\psi_t})$$
-            $$\dot h_t = u_t s_{\theta_t} - v_t s_{\phi_t}c_{\theta_t} - w_t c_{\phi_t}c_{\theta_t}$$
+            <p>where \(\Delta t=\frac{1}{30}\) is the sampling time and \(g=32.174\,\mathrm{ft/s^2}\). The position kinematics are</p>
+            $$\dot p^N_t = u_t(c_{\theta_t}c_{\psi_t}) + v_t(s_{\phi_t}s_{\theta_t}c_{\psi_t} - c_{\phi_t}s_{\psi_t}) + w_t(c_{\phi_t}s_{\theta_t}c_{\psi_t} + s_{\phi_t}s_{\psi_t}),$$
+            $$\dot p^E_t = u_t(c_{\theta_t}s_{\psi_t}) + v_t(s_{\phi_t}s_{\theta_t}s_{\psi_t} + c_{\phi_t}c_{\psi_t}) + w_t(c_{\phi_t}s_{\theta_t}s_{\psi_t} - s_{\phi_t}c_{\psi_t}),$$
+            $$\dot h_t = u_t s_{\theta_t} - v_t s_{\phi_t}c_{\theta_t} - w_t c_{\phi_t}c_{\theta_t},$$
             <p>with \(c_{(\cdot)}=\cos(\cdot)\) and \(s_{(\cdot)}=\sin(\cdot)\).</p>
-            
-            <h4 class="title is-5">Aerodynamic Model</h4>
-            <p>Aerodynamic coefficients are predicted via polynomial approximation:</p>
-            $$[\hat C_{X,t},\hat C_{Y,t},\hat C_{Z,t},\hat C_{L,t},\hat C_{M,t},\hat C_{N,t}] = \phi(\upsilon_t)^\top W + B$$
+
+            <p>Aerodynamic coefficients are predicted via polynomial approximation</p>
+            $$[\hat C_{X,t},\hat C_{Y,t},\hat C_{Z,t},\hat C_{L,t},\hat C_{M,t},\hat C_{N,t}]
+            = \phi(\upsilon_t)^\top W + B,$$
             <p>where</p>
-            $$\upsilon_t=[\alpha_t,\beta_t,\mathrm{Mach}_t,p_t,q_t,r_t,\delta_{t,t},\delta_{e,t},\delta_{a,t},\delta_{r,t}]^\top$$
-            <p>and \(\alpha_t=\arctan2(w_t,u_t)\), \(\beta_t=\arcsin\!\left(\frac{v_t}{V_t}\right)\), \(V_t=\sqrt{u_t^2+v_t^2+w_t^2}\). Using dynamic pressure \(q_{\infty,t}=\frac{1}{2}\rho V_t^2\), wing area \(S\), span \(b\), mean chord \(\bar c\):</p>
-            $$X_t=q_{\infty,t}S\hat C_{X,t}, \quad Y_t=q_{\infty,t}S\hat C_{Y,t}, \quad Z_t=q_{\infty,t}S\hat C_{Z,t}$$
-            $$L_t=q_{\infty,t}Sb\,\hat C_{L,t}, \quad M_t=q_{\infty,t}S\bar c\,\hat C_{M,t}, \quad N_t=q_{\infty,t}Sb\,\hat C_{N,t}$$
-            <p>Angular accelerations satisfy:</p>
-            $$\dot\omega_t = I^{-1}\!\left(\begin{bmatrix}L_t\\M_t\\N_t\end{bmatrix} - \omega_t \times (I\omega_t)\right), \qquad \omega_t=[p_t,q_t,r_t]^\top$$
-            <p>Control inputs are normalized and bounded by \(\delta_{a,t},\delta_{e,t},\delta_{r,t}\in[-1,1]\) and \(\delta_{t,t}\in[0,1]\).</p>
-            
-            <h4 class="title is-5">Model Uncertainty</h4>
-            <p>Model uncertainty is quantified via residuals in the aerodynamic coefficients:</p>
-            $$\begin{align}
-            \delta C_{X,t} &= C_{X,t,\text{target}} - \hat C_{X,t}, \\
-            \delta C_{Y,t} &= C_{Y,t,\text{target}} - \hat C_{Y,t}, \\
-            \delta C_{Z,t} &= C_{Z,t,\text{target}} - \hat C_{Z,t}, \\
-            \delta C_{L,t} &= C_{L,t,\text{target}} - \hat C_{L,t}, \\
-            \delta C_{M,t} &= C_{M,t,\text{target}} - \hat C_{M,t}, \\
-            \delta C_{N,t} &= C_{N,t,\text{target}} - \hat C_{N,t}.
-            \end{align}$$
+            $$\upsilon_t=[\alpha_t,\beta_t,\mathrm{Mach}_t,p_t,q_t,r_t,\delta_{e,t},\delta_{a,t},\delta_{r,t}]^\top,$$
+            <p>and \(\alpha_t=\arctan2(w_t,u_t), ~
+            \beta_t=\arcsin\!\left(\frac{v_t}{V_t}\right), ~
+            V_t=\sqrt{u_t^2+v_t^2+w_t^2}\). Using dynamic pressure \(q_{\infty,t}=\frac12\rho V_t^2\), wing area \(S\), span \(b\), mean chord \(\bar c\), and mass \(m\):</p>
+            $$X_t=q_{\infty,t}\frac{S}{m}\hat C_{X,t}+T(\delta_{t,t}),\quad
+            Y_t=q_{\infty,t}\frac{S}{m}\hat C_{Y,t},\quad
+            Z_t=q_{\infty,t}\frac{S}{m}\hat C_{Z,t},$$
+            $$L_t=q_{\infty,t}Sb\,\hat C_{L,t},\quad
+            M_t=q_{\infty,t}S\bar c\,\hat C_{M,t},\quad
+            N_t=q_{\infty,t}Sb\,\hat C_{N,t},$$
+            <p>and angular accelerations satisfy</p>
+            $$\dot\omega_t = I^{-1}\!\left(\begin{bmatrix}L_t\\M_t\\N_t\end{bmatrix} - \omega_t \times (I\omega_t)\right),\qquad
+            \omega_t=[p_t,q_t,r_t]^\top.$$
+            <p>Control inputs are normalized and bounded by \(\delta_{a,t},\delta_{e,t},\delta_{r,t}\in[-1,1]\), \(\delta_{t,t}\in[0,1]\).</p>
           </div>
         </div>
       </div>
