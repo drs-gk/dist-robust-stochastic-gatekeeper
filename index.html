@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="description"
-        content="Distributionally Robust Stochastic Gatekeeper (DRS-gatekeeper) is a sampling-based safety filter with probabilistic safety guarantees under uncertainty and distribution shift.">
+        content="Distributionally Robust Stochastic gatekeeper (DRS-gatekeeper) is a sampling-based safety filter with probabilistic safety guarantees under uncertainty and distribution shift.">
   <meta name="keywords"
         content="DRS-gatekeeper, distributionally robust control, stochastic safety filter, Wasserstein ambiguity set, nonlinear systems">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Distributionally Robust Stochastic Gatekeeper</title>
+  <title>Distributionally Robust Safety Under Arbitrary Uncertainties: A Safety Filtering Approach</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
@@ -76,8 +76,8 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Distributionally Robust Stochastic Gatekeeper</h1>
-          <h2 class="subtitle is-4">Sampling-based probabilistic safety for nonlinear systems under uncertainty and distribution shift</h2>
+          <h1 class="title is-1 publication-title">Distributionally Robust Safety Under Arbitrary Uncertainties:  A Safety Filtering Approach</h1>
+          <!-- <h2 class="subtitle is-4">Sampling-based probabilistic safety for nonlinear systems under uncertainty and distribution shift</h2> -->
 
           <div class="is-size-5 publication-authors">
             <span class="author-block">Anonymous Authors</span>
@@ -125,7 +125,7 @@
             differs from the nominal one.
           </p>
           <p>
-            This project introduces <strong>Distributionally Robust Stochastic Gatekeeper (DRS-gatekeeper)</strong>,
+            This project introduces <strong>Distributionally Robust Stochastic gatekeeper (DRS-gatekeeper)</strong>,
             a sampling-based safety filter designed to provide <strong>probabilistic safety guarantees for
             nonlinear systems under arbitrary uncertainty structure and uncertain distributions</strong>.
           </p>
@@ -156,6 +156,42 @@
 
     <div class="columns is-centered">
       <div class="column is-full">
+        <h3 class="title is-4">Formula 1 Racecar</h3>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column has-text-centered">
+        <p><strong>MPPI</strong></p>
+        <img src="https://github.com/user-attachments/assets/53153f02-e6bb-4efa-af1d-6f0d17105df3"
+             alt="Formula 1 racecar MPPI result" style="max-width: 100%;">
+      </div>
+      <div class="column has-text-centered">
+        <p><strong>DRS-gatekeeper</strong></p>
+        <img src="https://github.com/user-attachments/assets/30c0d701-5119-4edb-b5e3-b4f55c6b385f"
+             alt="Formula 1 racecar DRS-gatekeeper result" style="max-width: 100%;">
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <h3 class="title is-4">F-16 Fighter Jet</h3>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column has-text-centered">
+          <p><strong>Nominal</strong></p>
+          <img src="https://github.com/user-attachments/assets/8393db88-44c6-41c3-9b51-53ffd2113cf6"
+               alt="F-16 fighter jet nominal result" style="max-width: 100%;">
+      </div>
+      <div class="column has-text-centered">
+          <p><strong>DRS-gatekeeper</strong></p>
+          <img src="https://github.com/user-attachments/assets/c0962e98-1c34-4ec4-9071-2d2d8c132882"
+               alt="F-16 fighter jet DRS-gatekeeper result" style="max-width: 100%;">
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-full">
         <h3 class="title is-4">Dubins Vehicle</h3>
       </div>
     </div>
@@ -172,7 +208,7 @@
              alt="Dubins vehicle DR-CBF baseline β=0.01" style="max-width: 100%;">
       </div>
       <div class="column has-text-centered">
-        <p><strong>DRS-Gatekeeper</strong></p>
+        <p><strong>DRS-gatekeeper</strong></p>
         <img src="./static/animations/simple/beta_01/gatekeeper_rollouts.gif"
              alt="Dubins vehicle DRS-gatekeeper β=0.01" style="max-width: 100%;">
       </div>
@@ -190,45 +226,9 @@
              alt="Dubins vehicle DR-CBF baseline β=0.05" style="max-width: 100%;">
       </div>
       <div class="column has-text-centered">
-        <p><strong>DRS-Gatekeeper</strong></p>
+        <p><strong>DRS-gatekeeper</strong></p>
         <img src="./static/animations/simple/beta_05/gatekeeper_rollouts.gif"
              alt="Dubins vehicle DRS-gatekeeper β=0.05" style="max-width: 100%;">
-      </div>
-    </div>
-
-    <div class="columns is-centered">
-      <div class="column is-full">
-        <h3 class="title is-4">Formula 1 Racecar</h3>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column has-text-centered">
-        <p><strong>MPPI</strong></p>
-        <img src="https://github.com/user-attachments/assets/53153f02-e6bb-4efa-af1d-6f0d17105df3"
-             alt="Formula 1 racecar MPPI result" style="max-width: 100%;">
-      </div>
-      <div class="column has-text-centered">
-        <p><strong>Ours</strong></p>
-        <img src="https://github.com/user-attachments/assets/30c0d701-5119-4edb-b5e3-b4f55c6b385f"
-             alt="Formula 1 racecar DRS-gatekeeper result" style="max-width: 100%;">
-      </div>
-    </div>
-
-    <div class="columns is-centered">
-      <div class="column is-full">
-        <h3 class="title is-4">F-16 Fighter Jet</h3>
-      </div>
-    </div>
-    <div class="columns">
-      <div class="column has-text-centered">
-          <p><strong>MPPI</strong></p>
-          <img src="https://github.com/user-attachments/assets/8393db88-44c6-41c3-9b51-53ffd2113cf6"
-               alt="F-16 fighter jet nominal result" style="max-width: 100%;">
-      </div>
-      <div class="column has-text-centered">
-          <p><strong>DRS-Gatekeeper</strong></p>
-          <img src="https://github.com/user-attachments/assets/c0962e98-1c34-4ec4-9071-2d2d8c132882"
-               alt="F-16 fighter jet DRS-gatekeeper result" style="max-width: 100%;">
       </div>
     </div>
   </div>
