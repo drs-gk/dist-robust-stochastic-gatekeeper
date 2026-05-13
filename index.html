@@ -295,15 +295,15 @@
             
             <h4 class="title is-5">Discrete-Time Bicycle Dynamics</h4>
             <p>We model the car's dynamics using the discrete-time bicycle dynamics \(x_{t+1} = f(x_t, u_t)\) as:</p>
-            $$x_{t+1} = x_t + \Delta t \begin{bmatrix} 
-            \bar{v}^x_t \cos \psi_t - \bar{v}^y_t \sin \psi_t \\ 
-            \bar{v}^x_t \sin \psi_t + \bar{v}^y_t \cos \psi_t \\ 
+            $$x_{t+1} = x_t + \Delta t \underbrace{\begin{bmatrix}
+            \bar{v}^x_t \cos \psi_t - \bar{v}^y_t \sin \psi_t \\
+            \bar{v}^x_t \sin \psi_t + \bar{v}^y_t \cos \psi_t \\
             \bar{r}_t \\
             a_{\text{long},t} + v^y_t r_t \\
             \frac{1}{m}(F_{yf} \cos q_t + F_{yr}) - v^x_t r_t \\
             \frac{1}{I_z}(l_f F_{yf} \cos q_t - l_r F_{yr}) \\
             k_{\delta}(q_{\text{cmd}, t} - q_{t})
-            \end{bmatrix}$$
+            \end{bmatrix}}_{\dot x_t}$$
             <p>where \(\bar{v}^x_t, \bar{v}^y_t, \bar{r}_t\) are interval-averaged quantities for numerical stability, and \(\Delta t=0.05\) is the sampling time. The longitudinal acceleration is:</p>
             $$a_{\text{long},t} = a_{\text{th},t} a_{\max} - a_{\text{br},t} a_{\text{br,max}} - \frac{C_d}{m} v^x_t |v^x_t|$$
             <p>Lateral tire forces follow a linear model:</p>
@@ -316,9 +316,13 @@
             $$\begin{align}
             \delta v^x_t &= v^x_{t+1,\text{gt}} - (v^x_t + \dot{v}^x_t \Delta t), \\
             \delta v^y_t &= v^y_{t+1,\text{gt}} - (v^y_t + \dot{v}^y_t \Delta t), \\
-            \delta r_t &= r_{t+1,\text{gt}} - (r_t + \dot{r}_t \Delta t), \\
-            \delta q_t &= q_{t+1,\text{gt}} - (q_t + \dot q_t \Delta t).
+            \delta r_t &= r_{t+1,\text{gt}} - (r_t + \dot{r}_t \Delta t).
             \end{align}$$
+
+            <div class="has-text-centered" style="margin-top: 1.5rem;">
+              <img src="https://github.com/user-attachments/assets/3dd3b165-ab5d-4b9a-ad8b-e06a1a6c9926"
+                   alt="Formula 1 racecar model identification and uncertainty" style="max-width: 100%;">
+            </div>
           </div>
         </div>
       </div>
@@ -334,7 +338,7 @@
             <p>with aileron, elevator, rudder, and throttle commands. Note that \(\delta\), \(\alpha\), and \(\beta\) in the F-16 dynamics denote control inputs, angle of attack, and sideslip angle, and are distinct from DRS-gatekeeper parameters.</p>
 
             <p>We model the aircraft dynamics using a discrete-time rigid-body model \(x_{t+1} = f(x_t, u_t)\) as</p>
-            $$x_{t+1} = x_t + \Delta t \begin{bmatrix}
+            $$x_{t+1} = x_t + \Delta t \underbrace{\begin{bmatrix}
             \dot p^N_t \\
             \dot p^E_t \\
             \dot h_t \\
@@ -347,7 +351,8 @@
             p_t + q_t \sin\phi_t \tan\theta_t + r_t \cos\phi_t \tan\theta_t \\
             q_t \cos\phi_t - r_t \sin\phi_t \\
             \frac{q_t \sin\phi_t + r_t \cos\phi_t}{\cos\theta_t}
-            \end{bmatrix}$$
+            \end{bmatrix}}_{\dot x_t}$$
+
             <p>where \(\Delta t=\frac{1}{30}\) is the sampling time and \(g=32.174\,\mathrm{ft/s^2}\). The position kinematics are</p>
             $$\dot p^N_t = u_t(c_{\theta_t}c_{\psi_t}) + v_t(s_{\phi_t}s_{\theta_t}c_{\psi_t} - c_{\phi_t}s_{\psi_t}) + w_t(c_{\phi_t}s_{\theta_t}c_{\psi_t} + s_{\phi_t}s_{\psi_t}),$$
             $$\dot p^E_t = u_t(c_{\theta_t}s_{\psi_t}) + v_t(s_{\phi_t}s_{\theta_t}s_{\psi_t} + c_{\phi_t}c_{\psi_t}) + w_t(c_{\phi_t}s_{\theta_t}s_{\psi_t} - s_{\phi_t}c_{\psi_t}),$$
@@ -372,6 +377,50 @@
             $$\dot\omega_t = I^{-1}\!\left(\begin{bmatrix}L_t\\M_t\\N_t\end{bmatrix} - \omega_t \times (I\omega_t)\right),\qquad
             \omega_t=[p_t,q_t,r_t]^\top.$$
             <p>Control inputs are normalized and bounded by \(\delta_{a,t},\delta_{e,t},\delta_{r,t}\in[-1,1]\), \(\delta_{t,t}\in[0,1]\).</p>
+
+
+            <h4 class="title is-5" style="margin-top: 1.5rem;">Trajectory Generation</h4>
+            <p>Trajectory generation for the F-16 case study follows the optimization-based workflow described in <a href="https://github.com/peterdsharpe/air-racing-optimization/tree/master">air-racing-optimization</a>.</p>
+            <p> The canyon elevation data is obtained from an <a href="https://www.opentopography.org/">OpenTopography</a> USGS 10 m digital elevation model of <a href="https://en.wikipedia.org/wiki/Black_Canyon_of_the_Gunnison_National_Park">Black Canyon of the Gunnison National Park</a>.</p>
+            <h4 class="title is-5" style="margin-top: 1.5rem;">Polynomial Model Identification and Uncertainty Injection</h4>
+            <div class="has-text-centered">
+              <img src="https://github.com/user-attachments/assets/cd2c8906-3985-49d6-aea7-b588946076ce"
+                   alt="F-16 model identification and uncertainty" style="max-width: 100%;">
+            </div>
+
+            <p>The nominal aerodynamic model is identified from generated simulator data. Each rollout provides state, action, and next-state samples, which are converted into aerodynamic coefficient targets. A regularized polynomial regression is then fit from the selected flight and control features to the six aerodynamic coefficient channels:</p>
+            $$\mathbf{C}_{\mathrm{nom}}
+=
+\begin{bmatrix}
+C_X & C_Y & C_Z & C_L & C_M & C_N
+\end{bmatrix}^{\top}.$$
+
+            <p>After fitting the nominal polynomial model, residual coefficient errors are computed on the same generated dataset. Structured residual trends are removed using context-dependent calibration features, namely flight condition. The remaining centered residuals are stored as an empirical uncertainty model. During rollout, uncertainty samples are drawn from residuals observed in nearby historical contexts, so the injected uncertainty remains dependent on the current flight regime rather than being modeled as fixed Gaussian noise.</p>
+
+            <p>In the gatekeeper rollout, the sampled uncertainty enters directly in coefficient space. Let</p>
+            $$\mathbf{w}
+=
+\begin{bmatrix}
+w_{C_X} & w_{C_Y} & w_{C_Z} & w_{C_L} & w_{C_M} & w_{C_N}
+\end{bmatrix}^{\top}$$
+            <p>denote the sampled coefficient residual. The perturbed aerodynamic coefficients are</p>
+            $$\mathbf{C}
+=
+\mathbf{C}_{\mathrm{nom}} + \mathbf{w}.$$
+
+            <p>These perturbed coefficients are then converted into dimensional forces and moments:</p>
+            $$X = (C_X + w_{C_X})\frac{\bar q S}{m} + T(\delta_t),
+\qquad
+Y = (C_Y + w_{C_Y})\frac{\bar q S}{m},
+\qquad
+Z = (C_Z + w_{C_Z})\frac{\bar q S}{m},$$
+            $$L = (C_L + w_{C_L})\bar q S b,
+\qquad
+M = (C_M + w_{C_M})\bar q S \bar c,
+\qquad
+N = (C_N + w_{C_N})\bar q S b.$$
+
+            <p>Thus, uncertainty is injected before rigid-body propagation by perturbing the aerodynamic coefficients, which then changes the body-axis force and moment channels used by the rollout dynamics.</p>
           </div>
         </div>
       </div>
@@ -381,7 +430,6 @@
           <h3 class="title is-4">Dubins Vehicle</h3>
           <div class="content">
             <p>Obstacle avoidance under uncertain actuation and model mismatch.</p>
-            
             <h4 class="title is-5" style="margin-top: 1.5rem;">Dubins Model</h4>
             <p>We first introduce the Dubins model in continuous time with the state:</p>
             $$x=\begin{bmatrix}
@@ -393,6 +441,13 @@
             \dot{\theta} &= (1 + \eta_\omega) u_\omega + v \xi_\omega & \quad \dot{v} &= (1 + \eta_a) u_a + v \xi_a
             \end{align}$$
             <p>The noise vector \(\mathbf{w}^f= [\xi_a, \xi_\omega, \eta_a, \eta_\omega]^T\) depicts model mismatch and actuator gain error with a Gaussian mixture model as the true noise distribution, from which limited empirical noise samples are available. The constrained inputs are acceleration \(u_a \in [-5.0, 5.0]\) and turn rate \(u_\omega \in [-\frac{\pi}{4}, \frac{\pi}{4}]\). A lower bound on velocity is enforced in the dynamics such that \(v \ge 10.0\), which prevents the vehicle from stopping.</p>
+
+            <h4 class="title is-5" style="margin-top: 1.5rem;">Uncertainty Model</h4>
+            <p>The uncertainty vector \(w=[\xi_a,\xi_w,\eta_a,\eta_w]\) is generated from a two-component Gaussian mixture:</p>
+            $$w \sim 0.8\,\mathcal{N}\!\left(\mu_{\mathrm{nom}},\operatorname{diag}(\sigma_{\mathrm{nom}}^2)\right)
+\;+
+\;0.2\,\mathcal{N}\!\left(\mu_{\mathrm{out}},\operatorname{diag}(\sigma_{\mathrm{out}}^2)\right),$$
+            <p>with \(\mu_{\mathrm{nom}}=[0,0,0,0]\), \(\sigma_{\mathrm{nom}}=[0.05,0.02,0.03,0.03]\), \(\mu_{\mathrm{out}}=[-0.15,\,0.08,\,-0.10,\,0.05]\), and \(\sigma_{\mathrm{out}}=[0.02,0.01,0.05,0.05]\). A finite offline dataset (default size \(5000\)) is first sampled i.i.d. from this mixture, and the simulation then draws disturbances by uniform resampling with replacement from that dataset, i.e., from its empirical distribution \(\hat P=\frac{1}{5000}\sum_{i=1}^{5000}\delta_{w^{(i)}}\).</p>
 
             <h4 class="title is-5">Safety Constraint and CBF</h4>
             <p>The safety constraint is to avoid two static circular obstacles with centers \((p^i_x, p^i_y)\) and radii \(R_i\), \(i=1,2\). This defines the safe set:</p>
